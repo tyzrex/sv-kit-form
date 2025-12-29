@@ -50,9 +50,7 @@ pnpm add sv-kit-form
 		<span>{form.errors.email}</span>
 	{/if}
 
-	<button type="submit" disabled={form.isSubmitting}>
-		Submit
-	</button>
+	<button type="submit" disabled={form.isSubmitting}> Submit </button>
 </Form>
 ```
 

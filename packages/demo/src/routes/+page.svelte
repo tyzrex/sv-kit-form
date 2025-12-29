@@ -211,8 +211,7 @@ Submitting: {loginForm.isSubmitting}</pre>
 				</div>
 
 				<div>
-					<label for="signup-confirm" class="block text-sm font-medium mb-1"
-						>Confirm Password</label
+					<label for="signup-confirm" class="block text-sm font-medium mb-1">Confirm Password</label
 					>
 					<input
 						id="signup-confirm"

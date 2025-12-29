@@ -1,18 +1,36 @@
 {
-  "name": "svelte-form-monorepo",
-  "version": "1.0.0",
-  "private": true,
-  "type": "module",
-  "scripts": {
-    "dev": "pnpm --filter demo dev",
-    "dev:lib": "pnpm --filter sv-kit-form dev",
-    "build": "pnpm --filter sv-kit-form build",
-    "build:demo": "pnpm --filter demo build",
-    "preview": "pnpm --filter demo preview",
-    "package": "pnpm --filter sv-kit-form package",
-    "publish:lib": "pnpm --filter sv-kit-form publish"
-  },
-  "devDependencies": {
-    "@changesets/cli": "^2.27.1"
-  }
+	"name": "svelte-form-monorepo",
+	"version": "1.0.0",
+	"private": true,
+	"type": "module",
+	"scripts": {
+		"dev": "pnpm --filter demo dev",
+		"dev:lib": "pnpm --filter sv-kit-form dev",
+		"build": "pnpm --filter sv-kit-form build",
+		"build:demo": "pnpm --filter demo build",
+		"preview": "pnpm --filter demo preview",
+		"package": "pnpm --filter sv-kit-form package",
+		"publish:lib": "pnpm --filter sv-kit-form publish",
+		"format": "prettier --write .",
+		"format:check": "prettier --check .",
+		"lint": "eslint .",
+		"lint:fix": "eslint . --fix",
+		"check": "pnpm format:check && pnpm lint",
+		"prepare": "husky"
+	},
+	"devDependencies": {
+		"@changesets/cli": "^2.27.1",
+		"@typescript-eslint/eslint-plugin": "^8.20.0",
+		"@typescript-eslint/parser": "^8.20.0",
+		"eslint": "^9.18.0",
+		"eslint-config-prettier": "^9.1.0",
+		"eslint-plugin-svelte": "^3.0.0",
+		"globals": "^15.14.0",
+		"husky": "^9.1.7",
+		"lint-staged": "^15.2.11",
+		"prettier": "^3.4.2",
+		"prettier-plugin-svelte": "^3.3.2",
+		"svelte-eslint-parser": "^0.43.0",
+		"typescript": "^5.7.2"
+	}
 }

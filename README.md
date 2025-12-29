@@ -49,6 +49,40 @@ Build the demo:
 pnpm build:demo
 ```
 
+### Code Quality
+
+Format code with Prettier:
+
+```bash
+pnpm format
+```
+
+Check formatting:
+
+```bash
+pnpm format:check
+```
+
+Lint code with ESLint:
+
+```bash
+pnpm lint
+```
+
+Auto-fix linting issues:
+
+```bash
+pnpm lint:fix
+```
+
+Run all checks:
+
+```bash
+pnpm check
+```
+
+**Git Hooks**: The project uses Husky and lint-staged to automatically format and lint code before commits, ensuring consistent code quality across all devices.
+
 ## Packages
 
 ### sv-kit-form
@@ -56,6 +90,7 @@ pnpm build:demo
 The core form library with Svelte 5 runes. Located in `packages/sv-kit-form/`.
 
 Features:
+
 - 🚀 Built with Svelte 5 runes
 - 📝 Simple validation
 - 🎯 TypeScript support
