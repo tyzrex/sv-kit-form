@@ -10,6 +10,6 @@
 	let { onSubmit, children, class: className = '' }: Props = $props();
 </script>
 
-<form on:submit={onSubmit} class={className}>
+<form onsubmit={onSubmit} class={className}>
 	{@render children()}
 </form>

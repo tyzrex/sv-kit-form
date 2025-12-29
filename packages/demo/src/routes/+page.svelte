@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { createForm, Form } from 'sv-kit-form';
+	import { createForm, Form, validators } from 'sv-kit-form';
 
 	interface LoginForm {
 		email: string;
@@ -13,24 +13,11 @@
 			password: '',
 			remember: false
 		},
-		validate: (values) => {
-			const errors: Record<string, string> = {};
-
-			if (!values.email) {
-				errors.email = 'Email is required';
-			} else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)) {
-				errors.email = 'Invalid email address';
-			}
-
-			if (!values.password) {
-				errors.password = 'Password is required';
-			} else if (values.password.length < 6) {
-				errors.password = 'Password must be at least 6 characters';
-			}
-
-			return errors;
+		validationSchema: {
+			email: [validators.required, validators.email],
+			password: [validators.required, validators.minLength(6)]
 		},
-		onSubmit: async (values) => {
+		onSubmit: async (values: LoginForm) => {
 			// Simulate API call
 			await new Promise((resolve) => setTimeout(resolve, 1000));
 			alert(`Login successful!\n${JSON.stringify(values, null, 2)}`);
@@ -51,36 +38,13 @@
 			password: '',
 			confirmPassword: ''
 		},
-		validate: (values) => {
-			const errors: Record<string, string> = {};
-
-			if (!values.username) {
-				errors.username = 'Username is required';
-			} else if (values.username.length < 3) {
-				errors.username = 'Username must be at least 3 characters';
-			}
-
-			if (!values.email) {
-				errors.email = 'Email is required';
-			} else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)) {
-				errors.email = 'Invalid email address';
-			}
-
-			if (!values.password) {
-				errors.password = 'Password is required';
-			} else if (values.password.length < 8) {
-				errors.password = 'Password must be at least 8 characters';
-			}
-
-			if (!values.confirmPassword) {
-				errors.confirmPassword = 'Please confirm your password';
-			} else if (values.password !== values.confirmPassword) {
-				errors.confirmPassword = 'Passwords do not match';
-			}
-
-			return errors;
+		validationSchema: {
+			username: [validators.required, validators.minLength(3)],
+			email: [validators.required, validators.email],
+			password: [validators.required, validators.minLength(8)],
+			confirmPassword: [validators.required, validators.matches('password', 'Passwords must match')]
 		},
-		onSubmit: async (values) => {
+		onSubmit: async (values: SignupForm) => {
 			await new Promise((resolve) => setTimeout(resolve, 1000));
 			alert(`Signup successful!\n${JSON.stringify(values, null, 2)}`);
 			signupForm.reset();
@@ -105,12 +69,12 @@
 						id="login-email"
 						type="email"
 						value={loginForm.values.email}
-						oninput={(e) => loginForm.setFieldValue('email', e.currentTarget.value)}
-						onblur={() => loginForm.setFieldTouched('email')}
+						oninput={(e) => loginForm.handleChange('email', e.currentTarget.value)}
+						onblur={() => loginForm.handleBlur('email')}
 						class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-						class:border-red-500={loginForm.touched.email && loginForm.errors.email}
+						class:border-red-500={loginForm.touched.has('email') && loginForm.errors.email}
 					/>
-					{#if loginForm.touched.email && loginForm.errors.email}
+					{#if loginForm.touched.has('email') && loginForm.errors.email}
 						<p class="text-red-500 text-sm mt-1">{loginForm.errors.email}</p>
 					{/if}
 				</div>
@@ -121,12 +85,12 @@
 						id="login-password"
 						type="password"
 						value={loginForm.values.password}
-						oninput={(e) => loginForm.setFieldValue('password', e.currentTarget.value)}
-						onblur={() => loginForm.setFieldTouched('password')}
+						oninput={(e) => loginForm.handleChange('password', e.currentTarget.value)}
+						onblur={() => loginForm.handleBlur('password')}
 						class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-						class:border-red-500={loginForm.touched.password && loginForm.errors.password}
+						class:border-red-500={loginForm.touched.has('password') && loginForm.errors.password}
 					/>
-					{#if loginForm.touched.password && loginForm.errors.password}
+					{#if loginForm.touched.has('password') && loginForm.errors.password}
 						<p class="text-red-500 text-sm mt-1">{loginForm.errors.password}</p>
 					{/if}
 				</div>
@@ -136,7 +100,7 @@
 						id="remember"
 						type="checkbox"
 						checked={loginForm.values.remember}
-						onchange={(e) => loginForm.setFieldValue('remember', e.currentTarget.checked)}
+						onchange={(e) => loginForm.handleChange('remember', e.currentTarget.checked)}
 						class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
 					/>
 					<label for="remember" class="ml-2 block text-sm">Remember me</label>
@@ -168,12 +132,12 @@ Submitting: {loginForm.isSubmitting}</pre>
 						id="signup-username"
 						type="text"
 						value={signupForm.values.username}
-						oninput={(e) => signupForm.setFieldValue('username', e.currentTarget.value)}
-						onblur={() => signupForm.setFieldTouched('username')}
+						oninput={(e) => signupForm.handleChange('username', e.currentTarget.value)}
+						onblur={() => signupForm.handleBlur('username')}
 						class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-						class:border-red-500={signupForm.touched.username && signupForm.errors.username}
+						class:border-red-500={signupForm.touched.has('username') && signupForm.errors.username}
 					/>
-					{#if signupForm.touched.username && signupForm.errors.username}
+					{#if signupForm.touched.has('username') && signupForm.errors.username}
 						<p class="text-red-500 text-sm mt-1">{signupForm.errors.username}</p>
 					{/if}
 				</div>
@@ -184,12 +148,12 @@ Submitting: {loginForm.isSubmitting}</pre>
 						id="signup-email"
 						type="email"
 						value={signupForm.values.email}
-						oninput={(e) => signupForm.setFieldValue('email', e.currentTarget.value)}
-						onblur={() => signupForm.setFieldTouched('email')}
+						oninput={(e) => signupForm.handleChange('email', e.currentTarget.value)}
+						onblur={() => signupForm.handleBlur('email')}
 						class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-						class:border-red-500={signupForm.touched.email && signupForm.errors.email}
+						class:border-red-500={signupForm.touched.has('email') && signupForm.errors.email}
 					/>
-					{#if signupForm.touched.email && signupForm.errors.email}
+					{#if signupForm.touched.has('email') && signupForm.errors.email}
 						<p class="text-red-500 text-sm mt-1">{signupForm.errors.email}</p>
 					{/if}
 				</div>
@@ -200,12 +164,12 @@ Submitting: {loginForm.isSubmitting}</pre>
 						id="signup-password"
 						type="password"
 						value={signupForm.values.password}
-						oninput={(e) => signupForm.setFieldValue('password', e.currentTarget.value)}
-						onblur={() => signupForm.setFieldTouched('password')}
+						oninput={(e) => signupForm.handleChange('password', e.currentTarget.value)}
+						onblur={() => signupForm.handleBlur('password')}
 						class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-						class:border-red-500={signupForm.touched.password && signupForm.errors.password}
+						class:border-red-500={signupForm.touched.has('password') && signupForm.errors.password}
 					/>
-					{#if signupForm.touched.password && signupForm.errors.password}
+					{#if signupForm.touched.has('password') && signupForm.errors.password}
 						<p class="text-red-500 text-sm mt-1">{signupForm.errors.password}</p>
 					{/if}
 				</div>
@@ -217,13 +181,13 @@ Submitting: {loginForm.isSubmitting}</pre>
 						id="signup-confirm"
 						type="password"
 						value={signupForm.values.confirmPassword}
-						oninput={(e) => signupForm.setFieldValue('confirmPassword', e.currentTarget.value)}
-						onblur={() => signupForm.setFieldTouched('confirmPassword')}
+						oninput={(e) => signupForm.handleChange('confirmPassword', e.currentTarget.value)}
+						onblur={() => signupForm.handleBlur('confirmPassword')}
 						class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-						class:border-red-500={signupForm.touched.confirmPassword &&
+						class:border-red-500={signupForm.touched.has('confirmPassword') &&
 							signupForm.errors.confirmPassword}
 					/>
-					{#if signupForm.touched.confirmPassword && signupForm.errors.confirmPassword}
+					{#if signupForm.touched.has('confirmPassword') && signupForm.errors.confirmPassword}
 						<p class="text-red-500 text-sm mt-1">{signupForm.errors.confirmPassword}</p>
 					{/if}
 				</div>
@@ -246,7 +210,7 @@ Submitting: {signupForm.isSubmitting}</pre>
 	</div>
 
 	<!-- Features Section -->
-	<div class="mt-12 bg-gradient-to-r from-blue-50 to-green-50 p-8 rounded-lg">
+	<div class="mt-12 bg-linear-to-r from-blue-50 to-green-50 p-8 rounded-lg">
 		<h2 class="text-2xl font-bold mb-4">Features</h2>
 		<div class="grid md:grid-cols-2 gap-4">
 			<div class="flex items-start">
