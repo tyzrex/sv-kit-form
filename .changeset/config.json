@@ -1,0 +1,11 @@
+{
+  "$schema": "https://www.changesets.dev/schema.json",
+  "changelog": "@changesets/cli/changelog",
+  "commit": false,
+  "fixed": [],
+  "linked": [],
+  "access": "public",
+  "baseBranch": "main",
+  "updateInternalDependencies": "patch",
+  "ignore": ["demo"]
+}

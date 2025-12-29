@@ -1,39 +1,105 @@
-# sv
+# Svelte Form Monorepo
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+A monorepo for `sv-kit-form` - a lightweight form library for SvelteKit built with Svelte 5 runes.
 
-## Creating a project
+## Structure
 
-If you're seeing this, you've probably already done this step. Congrats!
-
-```sh
-# create a new project in the current directory
-npx sv create
-
-# create a new project in my-app
-npx sv create my-app
+```
+svelte-form/
+├── packages/
+│   ├── sv-kit-form/     # The core form library
+│   └── demo/             # Demo SvelteKit app
+├── pnpm-workspace.yaml
+└── package.json
 ```
 
-## Developing
+## Quick Start
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+### Install Dependencies
 
-```sh
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
+```bash
+pnpm install
 ```
 
-## Building
+### Development
 
-To create a production version of your app:
+Run the demo app (automatically uses the local form library):
 
-```sh
-npm run build
+```bash
+pnpm dev
 ```
 
-You can preview the production build with `npm run preview`.
+Or run the library in watch mode:
 
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
-# svelte-form
+```bash
+pnpm dev:lib
+```
+
+### Build
+
+Build the library:
+
+```bash
+pnpm build
+```
+
+Build the demo:
+
+```bash
+pnpm build:demo
+```
+
+## Packages
+
+### sv-kit-form
+
+The core form library with Svelte 5 runes. Located in `packages/sv-kit-form/`.
+
+Features:
+- 🚀 Built with Svelte 5 runes
+- 📝 Simple validation
+- 🎯 TypeScript support
+- ⚡ Zero dependencies
+
+See [packages/sv-kit-form/README.md](packages/sv-kit-form/README.md) for detailed documentation.
+
+### demo
+
+A SvelteKit app showcasing how to use `sv-kit-form`. Located in `packages/demo/`.
+
+## Publishing
+
+To publish the library to npm:
+
+1. Update the version in `packages/sv-kit-form/package.json`
+2. Build the library: `pnpm build`
+3. Publish: `pnpm publish:lib`
+
+Or use changesets for versioning:
+
+```bash
+pnpm changeset
+pnpm changeset version
+pnpm publish:lib
+```
+
+## Development Workflow
+
+1. Make changes to the library in `packages/sv-kit-form/src/`
+2. The demo app will automatically pick up changes via workspace linking
+3. Test your changes in the demo app
+4. Build and publish when ready
+
+## GitHub Setup
+
+To use this library in other projects from GitHub:
+
+```bash
+pnpm add github:yourusername/svelte-form#workspace=sv-kit-form
+```
+
+Or after publishing to npm:
+
+```bash
+pnpm add sv-kit-form
+```
