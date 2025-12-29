@@ -4,16 +4,13 @@
 
 import type { SvelteSet, SvelteMap } from 'svelte/reactivity';
 
-export type ValidationRule<T = unknown> = (
-	value: T,
-	formData?: Record<string, unknown>
-) => string | null;
+export type ValidationRule<T = any> = (value: T, formData?: Record<string, any>) => string | null;
 
-export type ValidationSchema<T extends Record<string, unknown>> = {
+export type ValidationSchema<T extends Record<string, any>> = {
 	[K in keyof T]?: ValidationRule<T[K]> | ValidationRule<T[K]>[];
 };
 
-export interface FormOptions<T extends Record<string, unknown>> {
+export interface FormOptions<T extends Record<string, any>> {
 	initialValues: T;
 	validationSchema?: ValidationSchema<T>;
 	onSubmit?: (values: T) => void | Promise<void>;
@@ -22,13 +19,13 @@ export interface FormOptions<T extends Record<string, unknown>> {
 }
 
 export interface FormFieldState {
-	value: unknown;
+	value: any;
 	error: string;
 	touched: boolean;
 	dirty: boolean;
 }
 
-export interface FieldProps<T = unknown, K = string> {
+export interface FieldProps<T = any, K = string> {
 	value: T;
 	errorMessage?: string;
 	fieldName: string;
@@ -37,7 +34,7 @@ export interface FieldProps<T = unknown, K = string> {
 	onblur: () => void;
 }
 
-export interface FormReturn<T extends Record<string, unknown>> {
+export interface FormReturn<T extends Record<string, any>> {
 	values: T;
 	errors: Partial<Record<keyof T, string>>;
 	touched: SvelteSet<keyof T>;

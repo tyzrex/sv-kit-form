@@ -140,8 +140,9 @@ export const validators = {
 	/**
 	 * Validates that a value matches another field (useful for password confirmation)
 	 */
+
 	matches:
-		<T extends Record<string, unknown>>(fieldName: keyof T, message?: string) =>
+		<T extends Record<string, any>>(fieldName: keyof T, message?: string) =>
 		(value: unknown, formData?: T): string | null => {
 			if (!formData) return null;
 			return value === formData[fieldName] ? null : message || `Must match ${String(fieldName)}`;

@@ -1,140 +1,212 @@
-# Svelte Form Monorepo
+# sv-kit-form
 
-A monorepo for `sv-kit-form` - a lightweight form library for SvelteKit built with Svelte 5 runes.
+A powerful, type-safe form validation library for SvelteKit built with Svelte 5 runes. **Designed to be copied into your projects** for full control and customization.
 
-## Structure
+## ✨ Features
 
-```
+- 🚀 Built with Svelte 5 runes (`$state`, `$derived`, `SvelteSet`, `SvelteMap`)
+- 📝 15+ built-in validators (required, email, minLength, phone, etc.)
+- 🎯 Full TypeScript support with strong type inference
+- 🔄 Automatic error clearing on field changes
+- 📍 Scroll to first error on submission
+- ⚡ Zero runtime dependencies (except Svelte)
+- 🎨 Unstyled - bring your own design
+- 🛠️ Easy to customize and extend
+
+## 🚀 Quick Start
+
+### Copy to Your Project
+
+\`\`\`bash
+
+# Copy the entire library to your project
+
+cp -r packages/sv-kit-form/src/lib your-project/src/lib/sv-kit-form
+\`\`\`
+
+### Basic Usage
+
+\`\`\`typescript
+import { createForm, validators } from 'sv-kit-form';
+
+interface LoginForm {
+email: string;
+password: string;
+}
+
+const form = createForm<LoginForm>({
+initialValues: { email: '', password: '' },
+validationSchema: {
+email: [validators.required, validators.email],
+password: [validators.required, validators.minLength(8)]
+},
+onSubmit: async (values) => {
+await fetch('/api/login', {
+method: 'POST',
+body: JSON.stringify(values)
+});
+}
+});
+\`\`\`
+
+\`\`\`svelte
+
+<form onsubmit={form.handleSubmit}>
+    <input
+        type="email"
+        value={form.values.email}
+        oninput={(e) => form.handleChange('email', e.currentTarget.value)}
+        onblur={() => form.handleBlur('email')}
+    />
+    {#if form.touched.has('email') && form.errors.email}
+        <span class="error">{form.errors.email}</span>
+    {/if}
+
+    <button type="submit" disabled={!form.isValid || form.isSubmitting}>
+        {form.isSubmitting ? 'Submitting...' : 'Submit'}
+    </button>
+
+</form>
+\`\`\`
+
+## 📚 Built-in Validators
+
+| Validator                      | Description               |
+| ------------------------------ | ------------------------- |
+| `validators.required`          | Field must have value     |
+| `validators.email`             | Valid email format        |
+| `validators.alphabetsOnly`     | Only alphabets and spaces |
+| `validators.minLength(n)`      | Minimum string length     |
+| `validators.maxLength(n)`      | Maximum string length     |
+| `validators.phone`             | 10-digit phone number     |
+| `validators.age(minAge)`       | Minimum age from DOB      |
+| `validators.url`               | Valid URL                 |
+| `validators.number`            | Must be a number          |
+| `validators.min(n)`            | Minimum numeric value     |
+| `validators.max(n)`            | Maximum numeric value     |
+| `validators.pattern(rx, msg)`  | Custom regex              |
+| `validators.matches(fld, msg)` | Match another field       |
+| `validators.custom(fn)`        | Custom validator          |
+
+## 🎯 Form API
+
+### State (Getters)
+
+\`\`\`typescript
+form.values // Current form values
+form.errors // Error messages
+form.touched // SvelteSet of touched fields
+form.dirty // SvelteSet of modified fields
+form.isSubmitting // Submission state
+form.isValid // Overall validity
+form.fieldRefs // SvelteMap of field refs
+\`\`\`
+
+### Methods
+
+\`\`\`typescript
+form.setValue(field, value) // Set field value
+form.setError(field, error) // Set error
+form.clearError(field) // Clear error
+form.validateField(field) // Validate single field
+form.validateForm() // Validate all fields
+form.handleBlur(field) // Handle blur event
+form.handleChange(field, value) // Handle change event
+form.handleSubmit(e) // Handle form submission
+form.scrollToFirstError() // Scroll to first error
+form.registerFieldRef(field, ref) // Register field ref
+form.getFieldProps(field) // Get field binding props
+form.reset() // Reset form to initial values
+form.resetErrors() // Reset only errors
+\`\`\`
+
+## 🛠️ Development
+
+### Project Structure
+
+\`\`\`
 svelte-form/
 ├── packages/
-│   ├── sv-kit-form/     # The core form library
-│   └── demo/             # Demo SvelteKit app
-├── pnpm-workspace.yaml
-└── package.json
-```
+│ ├── sv-kit-form/ # Core form library
+│ │ ├── src/lib/
+│ │ │ ├── createForm.svelte.ts
+│ │ │ ├── validators/index.ts
+│ │ │ ├── types.ts
+│ │ │ └── Form.svelte
+│ │ └── README.md
+│ └── demo/ # Demo app
+└── pnpm-workspace.yaml
+\`\`\`
 
-## Quick Start
+### Commands
 
-### Install Dependencies
+\`\`\`bash
 
-```bash
+# Install dependencies
+
 pnpm install
-```
 
-### Development
+# Run demo app
 
-Run the demo app (automatically uses the local form library):
-
-```bash
 pnpm dev
-```
 
-Or run the library in watch mode:
+# Build library
 
-```bash
-pnpm dev:lib
-```
+cd packages/sv-kit-form && pnpm build
 
-### Build
+# Format code
 
-Build the library:
+pnpm format
 
-```bash
-pnpm build
-```
+# Check formatting
 
-Build the demo:
-
-```bash
-pnpm build:demo
-```
+pnpm format:check
+\`\`\`
 
 ### Code Quality
 
-Format code with Prettier:
+- **ESLint 9.39.2**: Flat config with TypeScript and Svelte support
+- **Prettier 3.7.4**: Tabs, single quotes, 100 width
+- **Husky**: Pre-commit hooks for auto-formatting
+- **lint-staged**: Only formats staged files
 
-```bash
-pnpm format
-```
+## 📖 Documentation
 
-Check formatting:
+- **Detailed Usage Guide**: [packages/sv-kit-form/USAGE.md](packages/sv-kit-form/USAGE.md)
+- **Library Documentation**: [packages/sv-kit-form/README.md](packages/sv-kit-form/README.md)
+- **Quick Reference**: [QUICK_REFERENCE.md](QUICK_REFERENCE.md)
+- **Demo**: http://localhost:5173 (run `pnpm dev`)
 
-```bash
-pnpm format:check
-```
+## 💡 Custom Validators
 
-Lint code with ESLint:
+\`\`\`typescript
+// Simple validator
+const mustBeFoo = (value: string): string | null => {
+return value === 'foo' ? null : 'Must be "foo"';
+};
 
-```bash
-pnpm lint
-```
+// Validator with parameters
+const minWords =
+(count: number) =>
+(value: string): string | null => {
+const words = value.trim().split(/\s+/).length;
+return words >= count ? null : `At least ${count} words required`;
+};
 
-Auto-fix linting issues:
+// Field-dependent validator
+const afterStartDate = (value: string, formData?: Form): string | null => {
+if (!formData) return null;
+return new Date(value) > new Date(formData.startDate)
+? null
+: 'Must be after start date';
+};
+\`\`\`
 
-```bash
-pnpm lint:fix
-```
+## 🎨 Why Copy Instead of Install?
 
-Run all checks:
-
-```bash
-pnpm check
-```
-
-**Git Hooks**: The project uses Husky and lint-staged to automatically format and lint code before commits, ensuring consistent code quality across all devices.
-
-## Packages
-
-### sv-kit-form
-
-The core form library with Svelte 5 runes. Located in `packages/sv-kit-form/`.
-
-Features:
-
-- 🚀 Built with Svelte 5 runes
-- 📝 Simple validation
-- 🎯 TypeScript support
-- ⚡ Zero dependencies
-
-See [packages/sv-kit-form/README.md](packages/sv-kit-form/README.md) for detailed documentation.
-
-### demo
-
-A SvelteKit app showcasing how to use `sv-kit-form`. Located in `packages/demo/`.
-
-## Publishing
-
-To publish the library to npm:
-
-1. Update the version in `packages/sv-kit-form/package.json`
-2. Build the library: `pnpm build`
-3. Publish: `pnpm publish:lib`
-
-Or use changesets for versioning:
-
-```bash
-pnpm changeset
-pnpm changeset version
-pnpm publish:lib
-```
-
-## Development Workflow
-
-1. Make changes to the library in `packages/sv-kit-form/src/`
-2. The demo app will automatically pick up changes via workspace linking
-3. Test your changes in the demo app
-4. Build and publish when ready
-
-## GitHub Setup
-
-To use this library in other projects from GitHub:
-
-```bash
-pnpm add github:yourusername/svelte-form#workspace=sv-kit-form
-```
-
-Or after publishing to npm:
-
-```bash
-pnpm add sv-kit-form
-```
+- ✅ Full ownership and control over the code
+- ✅ Easy customization for project-specific needs
+- ✅ No dependency management
+- ✅ Direct access to modify validators and behavior
+- ✅ No version conflicts
+- ✅ Copy only what you need

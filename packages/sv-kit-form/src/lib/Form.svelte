@@ -2,7 +2,7 @@
 	import type { Snippet } from 'svelte';
 
 	interface Props {
-		onSubmit: (e: Event) => void;
+		onSubmit: (e: SubmitEvent) => void | Promise<void>;
 		children: Snippet;
 		class?: string;
 	}

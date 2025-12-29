@@ -25,9 +25,8 @@ import type { FormOptions, FormReturn, FieldProps } from './types';
  * });
  * ```
  */
-export function createForm<T extends Record<string, unknown>>(
-	options: FormOptions<T>
-): FormReturn<T> {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function createForm<T extends Record<string, any>>(options: FormOptions<T>): FormReturn<T> {
 	const {
 		initialValues,
 		validationSchema,
