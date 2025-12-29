@@ -17,57 +17,58 @@ A powerful, type-safe form validation library for SvelteKit built with Svelte 5 
 
 ### Copy to Your Project
 
-\`\`\`bash
-
+```bash
 # Copy the entire library to your project
 
 cp -r packages/sv-kit-form/src/lib your-project/src/lib/sv-kit-form
-\`\`\`
+
+
+```
 
 ### Basic Usage
 
-\`\`\`typescript
+```typescript
 import { createForm, validators } from 'sv-kit-form';
 
 interface LoginForm {
-email: string;
-password: string;
+	email: string;
+	password: string;
 }
 
 const form = createForm<LoginForm>({
-initialValues: { email: '', password: '' },
-validationSchema: {
-email: [validators.required, validators.email],
-password: [validators.required, validators.minLength(8)]
-},
-onSubmit: async (values) => {
-await fetch('/api/login', {
-method: 'POST',
-body: JSON.stringify(values)
+	initialValues: { email: '', password: '' },
+	validationSchema: {
+		email: [validators.required, validators.email],
+		password: [validators.required, validators.minLength(8)]
+	},
+	onSubmit: async (values) => {
+		await fetch('/api/login', {
+			method: 'POST',
+			body: JSON.stringify(values)
+		});
+	}
 });
-}
-});
-\`\`\`
+```
 
-\`\`\`svelte
-
+```svelte
 <form onsubmit={form.handleSubmit}>
-    <input
-        type="email"
-        value={form.values.email}
-        oninput={(e) => form.handleChange('email', e.currentTarget.value)}
-        onblur={() => form.handleBlur('email')}
-    />
-    {#if form.touched.has('email') && form.errors.email}
-        <span class="error">{form.errors.email}</span>
-    {/if}
+	<input
+		type="email"
+		value={form.values.email}
+		oninput={(e) => form.handleChange('email', e.currentTarget.value)}
+		onblur={() => form.handleBlur('email')}
+	/>
+	{#if form.touched.has('email') && form.errors.email}
+		<span class="error">{form.errors.email}</span>
+	{/if}
 
-    <button type="submit" disabled={!form.isValid || form.isSubmitting}>
-        {form.isSubmitting ? 'Submitting...' : 'Submit'}
-    </button>
-
+	​
+	<button type="submit" disabled={!form.isValid || form.isSubmitting}>
+		​ {form.isSubmitting ? 'Submitting...' : 'Submit'}
+		​
+	</button>
 </form>
-\`\`\`
+```
 
 ## 📚 Built-in Validators
 
@@ -92,39 +93,39 @@ body: JSON.stringify(values)
 
 ### State (Getters)
 
-\`\`\`typescript
-form.values // Current form values
-form.errors // Error messages
-form.touched // SvelteSet of touched fields
-form.dirty // SvelteSet of modified fields
-form.isSubmitting // Submission state
-form.isValid // Overall validity
-form.fieldRefs // SvelteMap of field refs
-\`\`\`
+```typescript
+form.values; // Current form values
+form.errors; // Error messages
+form.touched; // SvelteSet of touched fields
+form.dirty; // SvelteSet of modified fields
+form.isSubmitting; // Submission state
+form.isValid; // Overall validity
+form.fieldRefs; // SvelteMap of field refs
+```
 
 ### Methods
 
-\`\`\`typescript
-form.setValue(field, value) // Set field value
-form.setError(field, error) // Set error
-form.clearError(field) // Clear error
-form.validateField(field) // Validate single field
-form.validateForm() // Validate all fields
-form.handleBlur(field) // Handle blur event
-form.handleChange(field, value) // Handle change event
-form.handleSubmit(e) // Handle form submission
-form.scrollToFirstError() // Scroll to first error
-form.registerFieldRef(field, ref) // Register field ref
-form.getFieldProps(field) // Get field binding props
-form.reset() // Reset form to initial values
-form.resetErrors() // Reset only errors
-\`\`\`
+```typescript
+form.setValue(field, value); // Set field value
+form.setError(field, error); // Set error
+form.clearError(field); // Clear error
+form.validateField(field); // Validate single field
+form.validateForm(); // Validate all fields
+form.handleBlur(field); // Handle blur event
+form.handleChange(field, value); // Handle change event
+form.handleSubmit(e); // Handle form submission
+form.scrollToFirstError(); // Scroll to first error
+form.registerFieldRef(field, ref); // Register field ref
+form.getFieldProps(field); // Get field binding props
+form.reset(); // Reset form to initial values
+form.resetErrors(); // Reset only errors
+```
 
 ## 🛠️ Development
 
 ### Project Structure
 
-\`\`\`
+```
 svelte-form/
 ├── packages/
 │ ├── sv-kit-form/ # Core form library
@@ -136,13 +137,12 @@ svelte-form/
 │ │ └── README.md
 │ └── demo/ # Demo app
 └── pnpm-workspace.yaml
-\`\`\`
+```
 
 ### Commands
 
-\`\`\`bash
-
-# Install dependencies
+```bash
+#Install dependencies
 
 pnpm install
 
@@ -161,7 +161,7 @@ pnpm format
 # Check formatting
 
 pnpm format:check
-\`\`\`
+```
 
 ### Code Quality
 
@@ -179,28 +179,26 @@ pnpm format:check
 
 ## 💡 Custom Validators
 
-\`\`\`typescript
+```typescript
 // Simple validator
 const mustBeFoo = (value: string): string | null => {
-return value === 'foo' ? null : 'Must be "foo"';
+	return value === 'foo' ? null : 'Must be "foo"';
 };
 
 // Validator with parameters
 const minWords =
-(count: number) =>
-(value: string): string | null => {
-const words = value.trim().split(/\s+/).length;
-return words >= count ? null : `At least ${count} words required`;
-};
+	(count: number) =>
+	(value: string): string | null => {
+		const words = value.trim().split(/\s+/).length;
+		return words >= count ? null : `At least ${count} words required`;
+	};
 
 // Field-dependent validator
 const afterStartDate = (value: string, formData?: Form): string | null => {
-if (!formData) return null;
-return new Date(value) > new Date(formData.startDate)
-? null
-: 'Must be after start date';
+	if (!formData) return null;
+	return new Date(value) > new Date(formData.startDate) ? null : 'Must be after start date';
 };
-\`\`\`
+```
 
 ## 🎨 Why Copy Instead of Install?
 
